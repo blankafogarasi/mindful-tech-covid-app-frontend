@@ -42,7 +42,7 @@ const StatPage = () => {
         const statData = await response.json();
         if (statData) {
           setStatData(statData.map((stat) => {
-            return {...stat, updated: stat.updated.slice(0, 7)};
+            return {...stat, updated: stat.updated.slice(0, 10)};
           }));
         } else {
           setError('The data is not valid received from the API');

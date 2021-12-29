@@ -11,12 +11,26 @@ import {
 } from 'recharts';
 
 const LineChart = ({statData}) => {
+  const proccessLineChartData = (statData) => {
+    let prevActiveInfected = 0;
+    return statData.map((stat) => {
+      const lineChartDataObj = ({
+        updated: stat.updated.slice(0, 7),
+        activeinfected: stat.activeinfected,
+        newcase: Math.abs(stat.activeinfected - prevActiveInfected)});
+      prevActiveInfected = stat.activeinfected;
+      return lineChartDataObj;
+    });
+  };
+
+  const lineChartData = proccessLineChartData(statData);
+
   return (
     <ResponsiveContainer width="99%" height={500}>
       <LineRechart
         width={500}
         height={300}
-        data={statData}
+        data={lineChartData}
         margin={{
           top: 5,
           right: 30,
@@ -29,8 +43,8 @@ const LineChart = ({statData}) => {
         <YAxis />
         <Tooltip />
         <Legend wrapperStyle={{position: 'relative'}} />
-        <Line type="monotone" dataKey="deceased" stroke="#8884d8" activeDot={{r: 8}} />
-        {/* <Line type="monotone" dataKey="recovered" stroke="#82ca9d" />*/}
+        <Line type="monotone" dataKey="activeinfected" stroke="#8884d8" activeDot={{r: 8}} />
+        <Line type="monotone" dataKey="newcase" stroke="#82ca9d" />
       </LineRechart>
     </ResponsiveContainer>
   );
